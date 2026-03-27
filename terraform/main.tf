@@ -4,6 +4,10 @@ terraform {
       source  = "bmatcuk/vagrant"
       version = "~> 3.0"
     }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.4"
+    }
   }
 }
 
@@ -32,4 +36,12 @@ output "web_ips" {
     web1 = vagrant_box.web[0].provider["virtualbox"].network_adapters[0].ip
     web2 = vagrant_box.web[1].provider["virtualbox"].network_adapters[0].ip
   }
+}
+
+resource "local_file" "ansible_inventory" {
+  content = templatefile("${path.module}/inventory.tftpl", {
+    web1_ip = vagrant_box.web[0].provider["virtualbox"].network_adapters[0].ip
+    web2_ip = vagrant_box.web[1].provider["virtualbox"].network_adapters[0].ip
+  })
+  filename = "../ansible/inventory.ini"
 }
