@@ -1,0 +1,8 @@
+---
+- name: Configure web servers
+  hosts: web_servers
+  become: yes
+  roles:
+    - docker
+    - app-deploy
+    - node-exporter

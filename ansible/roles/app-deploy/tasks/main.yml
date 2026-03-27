@@ -1,0 +1,20 @@
+---
+- name: Create app directory
+  file:
+    path: /opt/app
+    state: directory
+    owner: vagrant
+    group: vagrant
+
+- name: Copy docker-compose.yml for the app
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/app/docker-compose.yml
+    owner: vagrant
+    group: vagrant
+
+- name: Pull and start containers
+  docker_compose:
+    project_src: /opt/app
+    state: present
+    restarted: yes
